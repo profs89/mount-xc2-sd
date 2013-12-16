@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">MountXc2SD</string>
+	<string name="button_mount">Swap external internal</string>
+	<string name="button_test">Test mount</string>
+
+	<string name="text_mounts">Mounts not tested</string>
+	<string name="text_mounts_n">External SD is not mounted</string>
+	<string name="text_mounts_y">External SD mounted successfully</string>
+</resources>
