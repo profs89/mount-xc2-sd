@@ -2,22 +2,20 @@ package com.profs89.MountXc2SD;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class Main extends Activity
 {
+
+	// /dev/fuse /storage/sdcard0 fuse rw,nosuid,nodev,noexec,relatime,user_id=1023,group_id=1023,default_permissions,allow_other 0 0
 
 	private String APP_TAG = Main.class.getName();
 	private static int sBuffLen = 1000;
@@ -126,7 +124,8 @@ public class Main extends Activity
 			Log.v(APP_TAG, ex.getMessage());
 		}
 
-		if(size>10){
+		if (size > 1.5)
+		{
 			return true;
 		}
 		return false;
