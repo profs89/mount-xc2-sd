@@ -4,7 +4,10 @@
           android:versionCode="1"
           android:versionName="1.0">
 
-	<uses-sdk android:minSdkVersion="15" />
+	<uses-sdk android:minSdkVersion="16" />
+
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 	<application
 			android:label="@string/app_name"
 			android:icon="@drawable/hdpi_icon">
@@ -17,5 +20,16 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+
+		<service
+				android:name="com.profs89.MountXc2SD.MountService"
+				android:enabled="true" />
+
+		<receiver android:name=".BReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<category android:name="android.intent.category.HOME" />
+			</intent-filter>
+		</receiver>
 	</application>
 </manifest>
