@@ -96,7 +96,7 @@ public class MountService extends Service
 
 		if (size > 1.5)
 		{
-			showToastMessage(context, context.getString(R.string.app_name) + "Memory is swapped");
+			showToastMessage(context, context.getString(R.string.app_name) + ": Memory is swapped");
 			if (!result.equals(""))
 			{
 				showToastMessage(context, result);
