@@ -31,6 +31,7 @@ public class MountService extends Service
 	public void onCreate()
 	{
 		super.onCreate();
+		showToastMessage(getBaseContext(), "MountXc2SD: service started");
 		if (!testMountPoint(this))
 		{
 			swapMemory(this);
@@ -82,6 +83,7 @@ public class MountService extends Service
 				else
 				{
 					showToastMessage(context, context.getString(R.string.app_name) + ": You don't have superuser rights");
+					showNotification(context, context.getString(R.string.app_name), "You don't have superuser rights");
 					break;
 				}
 			}
