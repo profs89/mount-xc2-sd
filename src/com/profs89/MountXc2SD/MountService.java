@@ -20,7 +20,6 @@ public class MountService extends Service
 {
 	private static int sBuffLen = 1000;
 
-
 	@Override
 	public IBinder onBind(Intent intent)
 	{
@@ -36,6 +35,10 @@ public class MountService extends Service
 		{
 			swapMemory(this);
 		}
+		else
+		{
+			this.stopSelf();
+		}
 	}
 
 
@@ -43,12 +46,14 @@ public class MountService extends Service
 	public void onDestroy()
 	{
 		super.onDestroy();
+		showToastMessage(getBaseContext(), "MountXc2SD: service stopped");
 	}
 
 
 	public static boolean testMountPoint(Context context)
 	{
 		double size = 0;
+		String result = "";
 		try
 		{
 			Process process = Runtime.getRuntime().exec("su");
@@ -58,24 +63,28 @@ public class MountService extends Service
 			InputStream inStream = process.getInputStream();
 			byte[] buffer = new byte[sBuffLen];
 			int read;
-			String result = new String();
 			String[] parts;
 			while (true)
 			{
 				read = inStream.read(buffer);
-				result += new String(buffer, 0, read);
-				if (read < sBuffLen)
+				if (read != -1)
 				{
-					Toast.makeText(context, result, Toast.LENGTH_LONG).show();
-					parts = result.split("\\s+");
-					Log.v(MountService.class.getName(), result);
-
+					result += new String(buffer, 0, read);
+					if (read < sBuffLen)
+					{
+						parts = result.split("\\s+");
+						Log.v(MountService.class.getName(), result);
+						size = Double.parseDouble(parts[6].replaceAll("[^\\d.]", ""));
+						Log.v(MountService.class.getName(), Double.toString(size));
+						break;
+					}
+				}
+				else
+				{
+					showToastMessage(context, context.getString(R.string.app_name) + ": You don't have superuser rights");
 					break;
 				}
 			}
-
-			size = Double.parseDouble(parts[6].replaceAll("[^\\d.]", ""));
-			Log.v(MountService.class.getName(), Double.toString(size));
 
 		}
 		catch (IOException ex)
@@ -85,7 +94,12 @@ public class MountService extends Service
 
 		if (size > 1.5)
 		{
-			showNotification(context, "Memory already swapped", "");
+			showToastMessage(context, context.getString(R.string.app_name) + "Memory is swapped");
+			if (!result.equals(""))
+			{
+				showToastMessage(context, result);
+			}
+			context.stopService(new Intent(context, MountService.class));
 			return true;
 		}
 		return false;
@@ -107,7 +121,10 @@ public class MountService extends Service
 			out.writeBytes("exit\n");
 			out.flush();
 			process.waitFor();
-			showNotification(context, "Swapped", "External / internal memories are now swapped");
+			if (testMountPoint(context))
+			{
+				showNotification(context, context.getString(R.string.app_name), "External / internal memories are now swapped");
+			}
 		}
 		catch (IOException ex)
 		{
@@ -131,5 +148,11 @@ public class MountService extends Service
 				.build();
 		notification.flags = Notification.FLAG_AUTO_CANCEL | Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND;
 		notificationManager.notify(10, notification);
+	}
+
+
+	public static void showToastMessage(Context context, String message)
+	{
+		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 	}
 }
