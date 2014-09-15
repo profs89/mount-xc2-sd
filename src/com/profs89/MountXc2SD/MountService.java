@@ -31,7 +31,7 @@ public class MountService extends Service
 	public void onCreate()
 	{
 		super.onCreate();
-		showToastMessage(getBaseContext(), "MountXc2SD: service started");
+		showToastMessage(getBaseContext(), getBaseContext().getString(R.string.app_name) + ": Service is started");
 		if (!testMountPoint(this))
 		{
 			swapMemory(this);
@@ -47,7 +47,7 @@ public class MountService extends Service
 	public void onDestroy()
 	{
 		super.onDestroy();
-		showToastMessage(getBaseContext(), "MountXc2SD: service stopped");
+		showToastMessage(getBaseContext(), getBaseContext().getString(R.string.app_name) + ": Service is stopped");
 	}
 
 
@@ -99,7 +99,7 @@ public class MountService extends Service
 			showToastMessage(context, context.getString(R.string.app_name) + ": Memory is swapped");
 			if (!result.equals(""))
 			{
-				showToastMessage(context, result);
+				showToastMessage(context, context.getString(R.string.app_name) + ": " + result);
 			}
 			context.stopService(new Intent(context, MountService.class));
 			return true;
